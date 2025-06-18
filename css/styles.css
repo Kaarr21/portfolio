@@ -1,28 +1,60 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Enhanced styles.css with Dark Mode Support */
+
+/* CSS Custom Properties (Variables) for theming */
+:root {
+  /* Light mode colors (default) */
+  --bg-primary: #f4f4f4;
+  --bg-secondary: #fff;
+  --bg-accent: #eee;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666;
+  --accent-color: #8400ff;
+  --accent-hover: #7000cc;
+  --shadow-light: rgba(0,0,0,0.1);
+  --shadow-medium: rgba(0,0,0,0.05);
+  --border-color: #e0e0e0;
 }
 
+/* Dark mode colors */
+[data-theme="dark"] {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
+  --bg-accent: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --accent-color: #bb86fc;
+  --accent-hover: #9965f4;
+  --shadow-light: rgba(255,255,255,0.1);
+  --shadow-medium: rgba(255,255,255,0.05);
+  --border-color: #404040;
+}
+
+/* Apply variables to existing styles */
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f4f4f4;
-  color: #1a1a1a;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 a {
   text-decoration: none;
-  color: #9900ff;
+  color: var(--accent-color);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
 }
 
 header {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--bg-secondary);
+  box-shadow: 0 2px 4px var(--shadow-light);
   position: sticky;
   top: 0;
   z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .navbar {
@@ -38,16 +70,57 @@ header {
   list-style: none;
   display: flex;
   gap: 2rem;
+  align-items: center;
 }
 
 .nav-links a:hover {
-  color: #9200cc;
+  color: var(--accent-hover);
 }
 
 .logo {
   font-weight: 800;
   font-size: 1.5rem;
-  color: #8c00ff;
+  color: var(--accent-color);
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+  background: var(--bg-accent);
+  border: 2px solid var(--border-color);
+  border-radius: 50px;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  width: 60px;
+  height: 30px;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  transform: translateX(2px);
+}
+
+[data-theme="dark"] .theme-toggle::before {
+  transform: translateX(28px);
+}
+
+.theme-toggle-icon {
+  font-size: 1rem;
+  z-index: 1;
 }
 
 .section {
@@ -58,94 +131,45 @@ header {
 
 .hero {
   text-align: center;
-  background-color: #8400ff;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
   color: white;
   padding: 5rem 2rem;
+  transition: background 0.3s ease;
 }
 
 .hero .btn {
   display: inline-block;
   margin-top: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background: white;
-  color: #f700ff;
+  background: var(--bg-secondary);
+  color: var(--accent-color);
   font-weight: bold;
   border-radius: 5px;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .hero .btn:hover {
-  background: #f0f0f0;
+  background: var(--bg-accent);
+  transform: translateY(-2px);
 }
 
 .project-card {
-  background: white;
+  background: var(--bg-secondary);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-footer {
-  text-align: center;
-  padding: 1rem;
-  background: #eee;
-  margin-top: 4rem;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .nav-links {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
-
-/* Add these styles to your existing styles.css */
-
-/* Active navigation highlighting */
-.nav-links a.active {
-  color: #8400ff;
-  font-weight: 600;
-  position: relative;
-}
-
-.nav-links a.active::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: #8400ff;
-}
-
-/* Enhanced project cards with hover effects */
-.project-card {
-  background: white;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px var(--shadow-medium);
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
 }
 
 .project-card:hover {
-  box-shadow: 0 8px 25px rgba(132, 0, 255, 0.15);
-  border-left: 4px solid #8400ff;
+  box-shadow: 0 8px 25px var(--shadow-light);
+  border-left: 4px solid var(--accent-color);
+  transform: translateY(-5px);
 }
 
-/* Mobile menu styles */
-.menu-toggle {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: #8400ff;
-}
-
-/* Skills section styling (for new section) */
+/* Skills section */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -154,73 +178,26 @@ footer {
 }
 
 .skill-item {
-  background: white;
+  background: var(--bg-secondary);
   padding: 1.5rem;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px var(--shadow-medium);
   text-align: center;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .skill-item:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--shadow-light);
 }
 
 .skill-icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: #8400ff;
+  color: var(--accent-color);
 }
 
-/* Loading animation for typing effect */
-.typing-cursor::after {
-  content: '|';
-  animation: blink 1s infinite;
-}
-
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-/* Enhanced responsive design */
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
-  }
-  
-  .nav-links {
-    position: fixed;
-    top: 70px;
-    right: -100%;
-    width: 100%;
-    height: calc(100vh - 70px);
-    background: white;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    transition: right 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  }
-  
-  .nav-links.nav-active {
-    right: 0;
-  }
-  
-  .nav-links li {
-    margin: 1rem 0;
-  }
-  
-  .hero {
-    padding: 3rem 1rem;
-  }
-  
-  .section {
-    padding: 2rem 1rem;
-  }
-}
-
-/* Contact form styling (for future contact form) */
+/* Contact form */
 .contact-form {
   max-width: 600px;
   margin: 2rem auto;
@@ -234,36 +211,110 @@ footer {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--border-color);
   border-radius: 5px;
   font-family: inherit;
-  transition: border-color 0.3s ease;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #8400ff;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(132, 0, 255, 0.1);
 }
 
 .btn-primary {
-  background: #8400ff;
+  background: var(--accent-color);
   color: white;
   padding: 0.75rem 2rem;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-weight: 600;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .btn-primary:hover {
-  background: #7000cc;
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  background: var(--bg-accent);
+  margin-top: 4rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Active navigation highlighting */
+.nav-links a.active {
+  color: var(--accent-color);
+  font-weight: 600;
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-color);
+}
+
+/* Scroll to top button */
+.scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.scroll-to-top:hover {
+  background: var(--accent-hover);
+  transform: scale(1.1);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .theme-toggle {
+    order: -1;
+  }
+  
+  .navbar {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
 }

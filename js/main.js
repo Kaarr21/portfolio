@@ -1,3 +1,99 @@
+// Enhanced main.js with Dark Mode Toggle
+
+// 1. Dark Mode Toggle Functionality
+class ThemeManager {
+  constructor() {
+    this.theme = localStorage.getItem('theme') || 'light';
+    this.init();
+  }
+  
+  init() {
+    // Apply saved theme on page load
+    this.applyTheme(this.theme);
+    
+    // Create and add toggle button to navigation
+    this.createToggleButton();
+    
+    // Listen for system theme changes
+    this.watchSystemTheme();
+  }
+  
+  createToggleButton() {
+    const navLinks = document.querySelector('.nav-links');
+    const toggleContainer = document.createElement('li');
+    
+    const toggle = document.createElement('button');
+    toggle.className = 'theme-toggle';
+    toggle.setAttribute('aria-label', 'Toggle dark mode');
+    toggle.innerHTML = `
+      <span class="theme-toggle-icon">${this.theme === 'light' ? '🌙' : '☀️'}</span>
+    `;
+    
+    // Add click event listener
+    toggle.addEventListener('click', () => this.toggleTheme());
+    
+    toggleContainer.appendChild(toggle);
+    navLinks.appendChild(toggleContainer);
+  }
+  
+  toggleTheme() {
+    this.theme = this.theme === 'light' ? 'dark' : 'light';
+    this.applyTheme(this.theme);
+    this.saveTheme();
+    this.updateToggleIcon();
+  }
+  
+  applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    
+    // Update meta theme-color for mobile browsers
+    let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (!metaThemeColor) {
+      metaThemeColor = document.createElement('meta');
+      metaThemeColor.name = 'theme-color';
+      document.head.appendChild(metaThemeColor);
+    }
+    
+    metaThemeColor.content = theme === 'dark' ? '#121212' : '#ffffff';
+  }
+  
+  saveTheme() {
+    localStorage.setItem('theme', this.theme);
+  }
+  
+  updateToggleIcon() {
+    const icon = document.querySelector('.theme-toggle-icon');
+    if (icon) {
+      icon.textContent = this.theme === 'light' ? '🌙' : '☀️';
+    }
+  }
+  
+  watchSystemTheme() {
+    // Listen for system theme changes (when user changes OS theme)
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // If no saved preference and system prefers dark, use dark
+      if (!localStorage.getItem('theme')) {
+        this.theme = 'dark';
+        this.applyTheme('dark');
+      }
+    }
+    
+    // Listen for changes to system theme
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) {
+        // Only auto-switch if user hasn't manually set a preference
+        this.theme = e.matches ? 'dark' : 'light';
+        this.applyTheme(this.theme);
+        this.updateToggleIcon();
+      }
+    });
+  }
+}
+
+// Initialize theme manager when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  new ThemeManager();
+});
 // Scroll to section smoothly
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function (e) {
